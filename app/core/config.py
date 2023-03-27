@@ -67,6 +67,18 @@ class Settings(BaseSettings):
     # FIRST SUPERUSER
     FIRST_SUPERUSER_EMAIL: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
+    FIRST_SUPERUSER_FIRST_NAME: str = "Super"
+    FIRST_SUPERUSER_LAST_NAME: str = "User"
+    FIRST_SUPERUSER_MOBILE_NUMBER: str = "+1234567890"
+    FIRST_SUPERUSER_POSTAL_ADDRESS: str = "1234 Main Street"
+
+    # FIRST SUPERUSER
+    TEST_EMAIL: EmailStr
+    TEST_PASSWORD: str
+    TEST_FIRST_NAME: str
+    TEST_LAST_NAME: str
+    TEST_MOBILE_NUMBER: str
+    TEST_POSTAL_ADDRESS: str
 
     @validator("DEFAULT_SQLALCHEMY_DATABASE_URI")
     def _assemble_default_db_connection(cls, v: str, values: dict[str, str]) -> str:

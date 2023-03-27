@@ -17,7 +17,8 @@ class UserUpdatePasswordRequest(BaseRequest):
 class UserCreateRequest(BaseRequest):
     email: EmailStr
     password: str
-    first_name: str
-    last_name: str
-    mobile_number: int = Field()
+    first_name: str = Field(alias="firstName")
+    last_name: str = Field(alias="lastName")
+    mobile_number: int = Field(alias="mobileNumber")
     chosen_plan_id: int
+    postal_address: str = Field(alias="postalAddress")

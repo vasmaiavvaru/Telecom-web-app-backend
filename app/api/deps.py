@@ -15,6 +15,11 @@ reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="auth/access-token")
 
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
+    """
+    Get a new session for each request.
+
+    :return: AsyncSession
+    """
     async with async_session() as session:
         yield session
 
@@ -22,6 +27,14 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 async def get_current_user(
     session: AsyncSession = Depends(get_session), token: str = Depends(reusable_oauth2)
 ) -> User:
+    """
+    Get the current user from the token.
+
+    :param session: User session
+    :param token: JWT token
+    :return: User
+    :raises HTTPException: If the token is invalid
+    """
     try:
         payload = jwt.decode(
             token, config.settings.SECRET_KEY, algorithms=[security.JWT_ALGORITHM]

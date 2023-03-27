@@ -2,7 +2,7 @@
 Put here any Python code that must be run before application startup.
 It is included in `init.sh` script.
 
-By default `main` create a superuser if not exists
+By default, `main` create a superuser if not exists
 """
 
 import asyncio
@@ -28,6 +28,10 @@ async def main() -> None:
                 hashed_password=security.get_password_hash(
                     config.settings.FIRST_SUPERUSER_PASSWORD
                 ),
+                mobile_number=config.settings.FIRST_SUPERUSER_MOBILE_NUMBER,
+                first_name=config.settings.FIRST_SUPERUSER_FIRST_NAME,
+                last_name=config.settings.FIRST_SUPERUSER_LAST_NAME,
+                postal_address=config.settings.FIRST_SUPERUSER_POSTAL_ADDRESS,
             )
             session.add(new_superuser)
             await session.commit()
@@ -39,4 +43,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())

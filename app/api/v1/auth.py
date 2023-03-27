@@ -18,10 +18,17 @@ router = APIRouter()
 
 @router.post("/access-token", response_model=AccessTokenResponse)
 async def login_access_token(
-    session: AsyncSession = Depends(deps.get_session),
-    form_data: OAuth2PasswordRequestForm = Depends(),
-):
-    """OAuth2 compatible token, get an access token for future requests using username and password"""
+        session: AsyncSession = Depends(deps.get_session),
+        form_data: OAuth2PasswordRequestForm = Depends(),
+) -> AccessTokenResponse:
+    """
+    OAuth2 compatible token, get an access token for future requests using username and password
+
+    :param session: Async Session
+    :param form_data: OAuth2PasswordRequestForm
+    :return: AccessTokenResponse
+    :raises HTTPException: Incorrect email or password
+    """
 
     result = await session.execute(select(User).where(User.email == form_data.username))
     user = result.scalars().first()
@@ -37,10 +44,16 @@ async def login_access_token(
 
 @router.post("/refresh-token", response_model=AccessTokenResponse)
 async def refresh_token(
-    input_: RefreshTokenRequest,
-    session: AsyncSession = Depends(deps.get_session),
-):
-    """OAuth2 compatible token, get an access token for future requests using refresh token"""
+        input_: RefreshTokenRequest,
+        session: AsyncSession = Depends(deps.get_session),
+) -> AccessTokenResponse:
+    """
+    OAuth2 compatible token, get an access token for future requests using refresh token
+
+    :param input_: RefreshTokenRequest
+    :param session: Async Session
+    :return: AccessTokenResponse
+    """
     try:
         payload = jwt.decode(
             input_.refresh_token,

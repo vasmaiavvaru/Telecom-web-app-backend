@@ -25,19 +25,21 @@ PWD_CONTEXT = CryptContext(
 
 
 class JWTTokenPayload(BaseModel):
+    """ Stores the JWT token payload after decoding. """
     sub: StrOrInt
     refresh: bool
     issued_at: int
     expires_at: int
 
 
-def create_jwt_token(subject: StrOrInt, exp_secs: int, refresh: bool):
-    """Creates jwt access or refresh token for user.
+def create_jwt_token(subject: StrOrInt, exp_secs: int, refresh: bool) -> tuple[str, int, int]:
+    """
+    Create a JWT token with the given subject, expiration time, and refresh flag.
 
-    Args:
-        subject: anything unique to user, id or email etc.
-        exp_secs: expire time in seconds
-        refresh: if True, this is refresh token
+    :param subject: anything unique to user, id or email etc.
+    :param exp_secs: expire time in seconds
+    :param refresh: if True, this is refresh token
+    :return: tuple of (encoded_jwt, expires_at, issued_at)
     """
 
     issued_at = int(time.time())
@@ -57,8 +59,13 @@ def create_jwt_token(subject: StrOrInt, exp_secs: int, refresh: bool):
     return encoded_jwt, expires_at, issued_at
 
 
-def generate_access_token_response(subject: StrOrInt):
-    """Generate tokens and return AccessTokenResponse"""
+def generate_access_token_response(subject: StrOrInt) -> AccessTokenResponse:
+    """
+    Generate access token and refresh token response.
+
+    :param subject: anything unique to user, id or email etc.
+    :return: AccessTokenResponse
+    """
     access_token, expires_at, issued_at = create_jwt_token(
         subject, ACCESS_TOKEN_EXPIRE_SECS, refresh=False
     )
@@ -77,18 +84,23 @@ def generate_access_token_response(subject: StrOrInt):
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verifies plain and hashed password matches
-
-    Applies passlib context based on bcrypt algorithm on plain passoword.
+    """
+    Verify password match with hashed password.
+    Applies passlib context based on bcrypt algorithm on plain password.
     It takes about 0.3s for default 12 rounds of SECURITY_BCRYPT_DEFAULT_ROUNDS.
+
+    :param plain_password: Plain password
+    :param hashed_password: Hashed password
+    :return: True if password matches, False otherwise
     """
     return PWD_CONTEXT.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
-    """Creates hash from password
+    """
+    Hash password with passlib context based on bcrypt algorithm.
 
-    Applies passlib context based on bcrypt algorithm on plain passoword.
-    It takes about 0.3s for default 12 rounds of SECURITY_BCRYPT_DEFAULT_ROUNDS.
+    :param password: Plain password
+    :return: Hashed password
     """
     return PWD_CONTEXT.hash(password)

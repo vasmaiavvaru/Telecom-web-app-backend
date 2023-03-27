@@ -15,7 +15,7 @@ alembic upgrade head
 """
 import uuid
 
-from sqlalchemy import String
+from sqlalchemy import String, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -34,3 +34,7 @@ class User(Base):
         String(254), nullable=False, unique=True, index=True
     )
     hashed_password: Mapped[str] = mapped_column(String(128), nullable=False)
+    first_name: Mapped[str] = mapped_column(String(128), nullable=False)
+    last_name: Mapped[str] = mapped_column(String(128), nullable=False)
+    mobile_number: Mapped[str] = mapped_column(String(128), nullable=False)
+    postal_address: Mapped[str] = mapped_column(Text, nullable=False)

@@ -20,3 +20,7 @@ class AccessTokenResponse(BaseResponse):
 class UserResponse(BaseResponse):
     id: str
     email: EmailStr
+    first_name: str
+    last_name: str
+    mobile_number: int
+    postal_address: str

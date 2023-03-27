@@ -7,9 +7,15 @@ WORKDIR /build
 RUN python -m venv /venv
 ENV PATH="/venv/bin:$PATH"
 
-COPY pyproject.toml .
-RUN pip install poetry
-RUN poetry install
+
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/opt/poetry python && \
+    cd /usr/local/bin && \
+    ln -s /opt/poetry/bin/poetry && \
+    poetry config virtualenvs.create false
+
+
+COPY pyproject.toml poetry.lock ./
+RUN poetry install --no-dev
 
 # Install uvicorn server
 RUN pip install uvicorn[standard]
@@ -26,6 +32,5 @@ RUN addgroup --gid 1001 --system uvicorn && \
 
 # Run init.sh script then start uvicorn
 RUN chown -R uvicorn:uvicorn /build
-CMD bash init.sh && \
+ENTRYPOINT bash init.sh && \
     runuser -u uvicorn -- /venv/bin/uvicorn app.main:app --app-dir /build --host 0.0.0.0 --port 8000 --workers 2 --loop uvloop
-EXPOSE 8000

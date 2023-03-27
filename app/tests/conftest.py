@@ -7,17 +7,18 @@ from httpx import AsyncClient
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.__main__ import app
+from app.main import app
 from app.core import config, security
 from app.core.session import async_engine, async_session
 from app.models import Base, User
 
-default_user_id = "b75365d9-7bf9-4f54-add5-aeab333a087b"
-default_user_email = "geralt@wiedzmin.pl"
-default_user_password = "geralt"
+settings = security.config.settings
+
+default_user_email = settings.TEST_EMAIL
+default_user_password = settings.TEST_PASSWORD
 default_user_password_hash = security.get_password_hash(default_user_password)
 default_user_access_token = security.create_jwt_token(
-    str(default_user_id), 60 * 60 * 24, refresh=False
+    str(default_user_email), 60 * 60 * 24, refresh=False
 )[0]
 
 
@@ -69,8 +70,12 @@ async def default_user(test_db_setup_sessionmaker) -> User:
             new_user = User(
                 email=default_user_email,
                 hashed_password=default_user_password_hash,
+                mobile=settings.TEST_MOBILE_NUMBER,
+                first_name=settings.TEST_FIRST_NAME,
+                last_name=settings.TEST_LAST_NAME,
+                postal_address=settings.TEST_POSTAL_ADDRESS,
             )
-            new_user.id = default_user_id
+            new_user.id = "0sdf03-acs3-2wrf43-23rve3453"
             session.add(new_user)
             await session.commit()
             await session.refresh(new_user)
