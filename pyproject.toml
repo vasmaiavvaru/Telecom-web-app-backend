@@ -16,6 +16,7 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 pydantic = {extras = ["dotenv", "email"], version = "^1.10.4"}
 tomli = "^2.0.1"
 ujson = "^5.7.0"
+mysqlclient = "^2.1.1"
 
 [tool.poetry.group.dev.dependencies]
 autoflake = "^2.0.1"

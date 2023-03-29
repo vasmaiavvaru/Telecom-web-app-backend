@@ -15,8 +15,7 @@ alembic upgrade head
 """
 import uuid
 
-from sqlalchemy import String, Text
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, String, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -27,9 +26,7 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "user_model"
 
-    id: Mapped[str] = mapped_column(
-        UUID(as_uuid=False), primary_key=True, default=lambda _: str(uuid.uuid4())
-    )
+    id = Column(String(16), primary_key=True, default=lambda _: str(uuid.uuid4()))
     email: Mapped[str] = mapped_column(
         String(254), nullable=False, unique=True, index=True
     )

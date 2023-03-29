@@ -83,7 +83,7 @@ class Settings(BaseSettings):
     @validator("DEFAULT_SQLALCHEMY_DATABASE_URI")
     def _assemble_default_db_connection(cls, v: str, values: dict[str, str]) -> str:
         return PostgresDsn.build(
-            scheme="postgresql+asyncpg",
+            scheme="mysql+asyncmy",
             user=values["DEFAULT_DATABASE_USER"],
             password=values["DEFAULT_DATABASE_PASSWORD"],
             host=values["DEFAULT_DATABASE_HOSTNAME"],
@@ -94,7 +94,7 @@ class Settings(BaseSettings):
     @validator("TEST_SQLALCHEMY_DATABASE_URI")
     def _assemble_test_db_connection(cls, v: str, values: dict[str, str]) -> str:
         return PostgresDsn.build(
-            scheme="postgresql+asyncpg",
+            scheme="mysql+asyncmy",
             user=values["TEST_DATABASE_USER"],
             password=values["TEST_DATABASE_PASSWORD"],
             host=values["TEST_DATABASE_HOSTNAME"],
