@@ -26,7 +26,7 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "user_model"
 
-    id = Column(String(16), primary_key=True, default=lambda _: str(uuid.uuid4()))
+    id = Column(String(36), primary_key=True, default=lambda _: str(uuid.uuid4()))
     email: Mapped[str] = mapped_column(
         String(254), nullable=False, unique=True, index=True
     )
