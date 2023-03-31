@@ -7,8 +7,12 @@ By default, `main` create a superuser if not exists
 
 import asyncio
 import json
+import sys
+from pathlib import Path
 
 from sqlalchemy import select
+
+sys.path.append(Path(__file__).parent.parent.as_posix())
 
 from app.core.session import async_session
 from app.models import Plans
