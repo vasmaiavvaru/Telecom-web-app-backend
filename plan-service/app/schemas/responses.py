@@ -13,3 +13,5 @@ class PlanResponse(BaseResponse):
     description: str
     price: int
     validity: int
+    
+

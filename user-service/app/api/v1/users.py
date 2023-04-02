@@ -17,6 +17,22 @@ from app.schemas.requests import (
 )
 from app.schemas.responses import UserResponse, PlanResponse, UserPlanResponse
 
+# edited
+import time
+from collections.abc import AsyncGenerator
+
+import jwt
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core import config, security
+from app.core.session import async_session
+from app.models import User
+from api import deps
+# edited
+
 http_client = httpx.AsyncClient()
 router = APIRouter()
 
@@ -178,3 +194,28 @@ async def get_current_user_plans(
     )
     user_plans = await session.execute(results)
     return user_plans.scalars().all()
+
+# edited
+@router.post("/token/decoder", tags=["decoder"])
+async def token_decoder(
+    session: AsyncSession = Depends(deps.get_session),
+    token: str = Depends(deps.reusable_oauth2)
+):
+    """
+    Get current user
+
+    :param current_user: Current user object
+    :param session: Async session
+    :return: Current user object
+   
+    """
+    payload = jwt.decode(
+        token, config.settings.SECRET_KEY, algorithms=[security.JWT_ALGORITHM]
+    )
+    token_data = security.JWTTokenPayload(**payload)
+    result = await session.execute(select(User).where(User.id == token_data.sub))
+    user = result.scalars().first()
+    if not user:
+        raise HTTPException(status_code=404, detail="user not found")
+    return user 
+# edited

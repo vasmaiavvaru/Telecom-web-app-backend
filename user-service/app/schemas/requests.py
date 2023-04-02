@@ -25,3 +25,4 @@ class UserCreateRequest(BaseRequest):
     last_name: str = Field(alias="lastName")
     mobile_number: str = Field(alias="mobileNumber")
     postal_address: str = Field(alias="postalAddress")
+   

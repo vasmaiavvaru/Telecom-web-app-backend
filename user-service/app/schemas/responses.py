@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from typing import Optional
 from pydantic import BaseModel, EmailStr, validator
 
 
@@ -26,7 +26,7 @@ class UserResponse(BaseResponse):
     last_name: str
     mobile_number: str
     postal_address: str
-    active_plan_id: str
+    active_plan_id: Optional[str]
 
 
 class UserPlanResponse(BaseResponse):

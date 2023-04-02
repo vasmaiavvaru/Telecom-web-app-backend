@@ -8,6 +8,8 @@ from pydantic import BaseModel
 
 from app.core import config
 from app.schemas.responses import AccessTokenResponse
+from sqlalchemy.orm import Session
+
 
 # Typing
 StrOrInt = Union[str, int]
@@ -104,3 +106,4 @@ def get_password_hash(password: str) -> str:
     :return: Hashed password
     """
     return PWD_CONTEXT.hash(password)
+
